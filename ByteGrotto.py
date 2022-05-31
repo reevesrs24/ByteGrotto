@@ -81,30 +81,32 @@ class ByteGrotto():
             self.best_score = score
 
     def generate_adversarial_pe(self):
-        epoch = 1
+        epoch = 0
 
         self.set_section_data()
         self.set_section_choices()
- 
+        self.write()
         score, flagged = self.evaluate()
 
         while flagged:
+            epoch += 1
             self.add_code_cave()
             self.write()
             score, flagged = self.evaluate()
             self.manage_pe_state(score)
 
             print("\rEpoch: {} Score: {} Best: {}".format(epoch, score, self.best_score), end='')
+
+            # 2MB size limit
             if len(self.pe.__data__) > 2000000:
                 print("Unable to find bypass")
                 return
 
-            epoch += 1
+            
 
     
     def get_data(self, raw_data_size_delta):
         data_file = self.section_data_choices[random.randrange(len(self.section_data_choices))]
-
         try:
             with open(data_file, "rb") as f:
                 data = f.read() 
@@ -117,8 +119,9 @@ class ByteGrotto():
         return bytearray(data[offset:offset+raw_data_size_delta])
 
     def evaluate(self):
-        self.pe.write(self.pe_ouput_name)
-        file_data = open(self.pe_ouput_name, "rb").read()
+        with open(self.pe_ouput_name, "rb") as f:
+            file_data = f.read()
+            f.close()
         malconv = MalConvModel(MALCONV_MODEL_PATH, thresh=0.5)
         return malconv.predict(file_data)
 
