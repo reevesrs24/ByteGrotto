@@ -41,6 +41,7 @@ class ByteGrotto():
         self.code_cave_size = code_cave_size
         self.pe = pefile.PE(self.pe_path)
         self.section_info = collections.OrderedDict()
+        self.prev_section_info = None
         self.prev_state_pe = None
         self.best_score = 1.0
         self.section_data_choices = []
@@ -75,6 +76,7 @@ class ByteGrotto():
     def manage_pe_state(self, score):
         if score > self.best_score:
             self.pe = self.prev_state_pe
+            self.section_info = copy.deepcopy(self.prev_section_info)
         else:
             self.best_score = score
 
@@ -125,6 +127,7 @@ class ByteGrotto():
 
     def add_code_cave(self):
             self.prev_state_pe = copy.copy(self.pe)
+            self.prev_section_info = copy.deepcopy(self.section_info)
             last_section_end_offset = 0
             offsets = {}
 
