@@ -1,9 +1,7 @@
 import os
-import time
 import copy
 import glob
 import torch
-import shutil
 import random
 import pefile
 import warnings
@@ -35,24 +33,32 @@ class MalConvModel(object):
         return outputs.detach().numpy()[0,1], outputs.detach().numpy()[0,1] > self.thresh
 
 class ByteGrotto():
-    def __init__(self, pe_path=None, pe_ouput_name=None, code_cave_size=512):
+    def __init__(self, pe_path, pe_ouput_name, code_cave_size=512):
+        self.pe = None
         self.pe_path = pe_path
         self.pe_ouput_name = pe_ouput_name
         self.code_cave_size = code_cave_size
-        self.pe = pefile.PE(self.pe_path)
         self.section_info = collections.OrderedDict()
         self.prev_section_info = None
-        self.prev_state_pe = None
         self.best_score = 1.0
         self.section_data_choices = []
+        self.ba = None
+        self.prev_ba = None
     
     def set_section_data(self):
+        with open(self.pe_path, 'rb') as f:
+            self.ba = bytearray(f.read())
+            f.close()
+
+        self.pe = pefile.PE(self.pe_path)
         for i in range(len(self.pe.sections)):
             self.section_info[self.pe.sections[i].Name.decode('utf-8')] = {
                 "SizeOfRawData" : copy.deepcopy(self.pe.sections[i].SizeOfRawData),
                 "PointerToRawData" : copy.deepcopy(self.pe.sections[i].PointerToRawData),
                 "section_index" : i
             }
+
+        self.pe.close()
 
     def set_section_choices(self):
         section_data_choices = glob.glob("data_sections/*")
@@ -62,6 +68,15 @@ class ByteGrotto():
                 self.section_data_choices.append(section_data_choices[i])
 
     def write(self):
+
+        with open(self.pe_ouput_name, 'wb+') as f:
+            f.write(self.ba)
+            f.close()
+
+        self.pe = pefile.PE(self.pe_ouput_name)
+        for _, section_data in self.section_info.items():
+            self.pe.sections[section_data['section_index']].PointerToRawData = section_data['PointerToRawData']
+        
         try:
             self.pe.OPTIONAL_HEADER.CheckSum = self.pe.generate_checksum()
         except Exception as e:
@@ -70,12 +85,10 @@ class ByteGrotto():
         self.pe.write(self.pe_ouput_name)
         self.pe.close()
 
-        if os.path.exists("temp/"):
-            shutil.rmtree('temp/')
 
     def manage_pe_state(self, score):
         if score > self.best_score:
-            self.pe = self.prev_state_pe
+            self.ba = copy.deepcopy(self.prev_ba)
             self.section_info = copy.deepcopy(self.prev_section_info)
         else:
             self.best_score = score
@@ -85,25 +98,24 @@ class ByteGrotto():
 
         self.set_section_data()
         self.set_section_choices()
-        self.write()
         score, flagged = self.evaluate()
 
         while flagged:
             epoch += 1
+            if epoch == 10:
+                break
             self.add_code_cave()
-            self.write()
             score, flagged = self.evaluate()
             self.manage_pe_state(score)
 
             print("\rEpoch: {} Score: {} Best: {}".format(epoch, score, self.best_score), end='')
 
             # 2MB size limit
-            if len(self.pe.__data__) > 2000000:
+            if len(self.ba) > 2000000:
                 print("Unable to find bypass")
                 return
 
-            
-
+        self.write()
     
     def get_data(self, raw_data_size_delta):
         data_file = self.section_data_choices[random.randrange(len(self.section_data_choices))]
@@ -116,20 +128,18 @@ class ByteGrotto():
         # choose a random offset for the data sample
         offset = random.randrange(0, len(data) - raw_data_size_delta)
 
+        return bytearray(b'\xAA' * raw_data_size_delta)
         return bytearray(data[offset:offset+raw_data_size_delta])
 
     def evaluate(self):
-        with open(self.pe_ouput_name, "rb") as f:
-            file_data = f.read()
-            f.close()
         malconv = MalConvModel(MALCONV_MODEL_PATH, thresh=0.5)
-        return malconv.predict(file_data)
+        return malconv.predict(self.ba)
 
     def align_new_section_size(self, current_section_size, section_alignment):
         return ((current_section_size + section_alignment) // section_alignment) * section_alignment if current_section_size % section_alignment else current_section_size
 
     def add_code_cave(self):
-            self.prev_state_pe = copy.copy(self.pe)
+            self.prev_ba = copy.deepcopy(self.ba)
             self.prev_section_info = copy.deepcopy(self.section_info)
             last_section_end_offset = 0
             offsets = {}
@@ -141,29 +151,14 @@ class ByteGrotto():
                 new_code_data = self.get_data(raw_data_size_delta)
 
                 if section_info['section_index'] == 0:
-                    offsets[self.pe.sections[section_info['section_index']].PointerToRawData + section_info['SizeOfRawData']] = new_code_data
+                    offsets[self.section_info[section_name]['PointerToRawData'] + section_info['SizeOfRawData']] = new_code_data
                 else:
                     offsets[last_section_end_offset + section_info['SizeOfRawData']] = new_code_data
-                    self.pe.sections[section_info['section_index']].PointerToRawData = last_section_end_offset
+                    self.section_info[section_name]['PointerToRawData'] = last_section_end_offset
                 
-                last_section_end_offset = self.pe.sections[section_info['section_index']].PointerToRawData + new_size_of_raw_data
+                last_section_end_offset = self.section_info[section_name]['PointerToRawData']  + new_size_of_raw_data
                 self.section_info[section_name]['SizeOfRawData'] = new_size_of_raw_data
             
-            if not os.path.exists("temp/"):
-                os.mkdir("temp/")
 
-            s = str(time.time())
-            self.pe.write("temp/{}".format(s))
-            self.pe.close()
-            with open("temp/{}".format(s), 'rb+') as f:
-                ba = bytearray(f.read())
-                f.close()
-
-            for k,v in offsets.items():
-                ba[k:k] = v
-            
-            with open("temp/{}".format(s), 'wb+') as f:
-                f.write(ba)
-                f.close()
-
-            self.pe = pefile.PE("temp/{}".format(s))
+            for offset, byte_data in offsets.items():
+                self.ba[offset:offset] = byte_data
