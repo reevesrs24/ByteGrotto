@@ -96,12 +96,14 @@ class ByteGrotto():
     def generate_adversarial_pe(self):
         epoch = 0
 
+
         self.set_section_data()
         self.set_section_choices()
         score, flagged = self.evaluate()
 
         while flagged:
             epoch += 1
+            
             self.add_code_cave()
             score, flagged = self.evaluate()
             self.manage_pe_state(score)
@@ -126,7 +128,6 @@ class ByteGrotto():
         # choose a random offset for the data sample
         offset = random.randrange(0, len(data) - raw_data_size_delta)
 
-        # return bytearray(b'\xAA' * raw_data_size_delta)
         return bytearray(data[offset:offset+raw_data_size_delta])
 
     def evaluate(self):
