@@ -7,13 +7,11 @@ Static AV-Evasion Via Code Cave Creation in Malware Portable Executables
 >\- *Phillip k. Dick* 
 
 <br/>
-
-This repo is my rendition of the code cave creation static av-evasion technique first proposed by the paper [Optimization of code caves in malware binaries to evade machine
-learning detector](https://www.sciencedirect.com/science/article/pii/S0167404822000426).
+This repo is my rendition of the code cave creation static av-evasion technique first proposed by the paper [Optimization of code caves in malware binaries to evade machine learning detectors](https://www.sciencedirect.com/science/article/pii/S0167404822000426).
 
 <br/>
-## Overview
 
+## Overview
 Code cave creation within a Windows Portable Executable (PE) is an interesting technique to bypass malware classifiers which utilize the entire byte sequence or raw bytes of a PE as their input feature.  Code caves are the "slack space" or byte space within a PE section that is unused by the program, but is created in order to adhere to the `SectionAlignment` header within the PE.  All PE sections must adhere to the byte alignment specified by this header value and if the section data does not directly align itself on this boundary the compiler will add null bytes as padding to ensure that the section is the specified size.
 
 <br/>
