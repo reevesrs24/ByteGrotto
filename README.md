@@ -20,7 +20,7 @@ Code caves can be created by modifying the `RawAddress` variable within the each
 <br/>
 <p align="center">
   <img width="460" height="300" src="code_cave.png">
-  <p align="center"><i>Fig. 2. Representation of the memory mapping of the original sample and a modified version with unused spaces introduced by the attacker (Yuste et al., 2022)</i></p>
+  <p align="center"><i>Representation of the memory mapping of the original sample and a modified version with unused spaces introduced by the attacker (Yuste et al., 2022)</i></p>
 </p>
 
 
