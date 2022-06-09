@@ -6,7 +6,7 @@ Static AV-Evasion Via Code Cave Creation in Malware Portable Executables
 >Comprehension follows perception.\
 >\- *Phillip k. Dick* 
 
-<br/>
+
 This repo is my rendition of the code cave creation static av-evasion technique first proposed by the paper [Optimization of code caves in malware binaries to evade machine learning detectors](https://www.sciencedirect.com/science/article/pii/S0167404822000426).
 
 <br/>
