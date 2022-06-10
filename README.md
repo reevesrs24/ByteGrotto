@@ -23,5 +23,7 @@ Code caves can be created by modifying the `RawAddress` variable within the each
   <p align="center"><i>Representation of the memory mapping of the original sample and a modified version with unused spaces introduced by the attacker (Yuste et al., 2022)</i></p>
 </p>
 
+## Application
+The ByteGrotto application will 
 
 
