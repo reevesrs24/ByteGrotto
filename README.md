@@ -53,3 +53,14 @@ if __name__ == '__main__':
 ```
 
 ## Running
+Below is a gif that demonstrates ByteGrotto in action.  A `GandCrab` malware variant was used for testing.  Upon each iteration the program outputs the `epoch`. `score` and `best` indicators.  The `epoch` it the current iteration, the `score` is the current prediction score and `best` is the prediction score to beat.
+<p align="center">
+  <img width="760" height="450" src="gifs/gandcrab_code_cave.gif">
+  <p align="center"><i>ByteGrotto transforming a GandCrab variant</i></p>
+</p>
+
+Below is a gif verifying that the modified sample still runs.  The new sample is uploaded to a sandbox to ensure that the indicators of compromise match with the original code.
+<p align="center">
+  <img width="760" height="450" src="gifs/GandCrab_SandBox.gif">
+  <p align="center"><i>GandCrab w/ code caves running in sandbox</i></p>
+</p>
