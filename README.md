@@ -59,6 +59,7 @@ Below is a gif that demonstrates ByteGrotto in action.  A `GandCrab` malware var
   <p align="center"><i>ByteGrotto transforming a GandCrab variant</i></p>
 </p>
 
+Below is a gif verifying that the modified sample still runs.  The new sample is uploaded to a sandbox to ensure that the indicators of compromise match with the original code.
 <p align="center">
   <img width="760" height="450" src="gifs/GandCrab_SandBox.gif">
   <p align="center"><i>GandCrab w/ code caves running in sandbox</i></p>
