@@ -33,6 +33,11 @@ The ByteGrotto application will take any x32 or .NET PE and and create code cave
 </p>
 
 ## Setup
+Install the `requirements.txt` file in a python virtual environment.
+```bash
+pip install -r requirements.txt
+```
+
 To evaluate a PE against a model one will need to change the `evaluate` function within the `ByteGrotto` class.  Currently `ByteGrotto` is setup to run against the MalConv model.  
 ```python
     def evaluate(self):
@@ -59,7 +64,7 @@ Below is a gif that demonstrates ByteGrotto in action.  A `GandCrab` malware var
   <p align="center"><i>ByteGrotto transforming a GandCrab variant</i></p>
 </p>
 
-Below is a gif verifying that the modified sample still runs.  The new sample is uploaded to a sandbox to ensure that the indicators of compromise match with the original code.
+Below is a gif showing that the modified sample still is able to be executed and runs as intended.  The new sample was uploaded to a sandbox to ensure that the indicators of compromise match with the original binary.
 <p align="center">
   <img width="760" height="450" src="gifs/GandCrab_SandBox.gif">
   <p align="center"><i>GandCrab w/ code caves running in sandbox</i></p>
