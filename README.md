@@ -19,11 +19,15 @@ Code caves can be created by modifying the `RawAddress` variable within the each
 
 <br/>
 <p align="center">
-  <img width="460" height="300" src="code_cave.png">
+  <img width="460" height="300" src="images/code_cave.png">
   <p align="center"><i>Representation of the memory mapping of the original sample and a modified version with unused spaces introduced by the attacker (Yuste et al., 2022)</i></p>
 </p>
 
 ## How it Works
 The ByteGrotto application will take any x32 or .NET PE and and create code caves with data randomly chosen form a set of data sections harvested from the SysWOW64 Windows directory. The reasoning behind this is that these sections will presumably contain data that is seemingly benign to machine learning classifiers.  The PE transformation is done strictly in memory and upon each code cave iteration the program will evaluate the changes and determine if the changes have either increased or decreased the prediction score of the classifier.  If the score has increased then the program revert the changes and try again and if the prediction score has decreased it will keep the modifications.  This cycle will continue unitl the threshold value has been reached.  
 
-
+<br/>
+<p align="center">
+  <img width="560" height="450" src="images/flowchart.png">
+  <p align="center"><i>Flowchart for ByteGrotto's code cave method </i></p>
+</p>
