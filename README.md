@@ -29,7 +29,7 @@ The ByteGrotto application will take any x32 or .NET PE and and create code cave
 <br/>
 <p align="center">
   <img width="560" height="450" src="images/flowchart.png">
-  <p align="center"><i>Flowchart for ByteGrotto's code cave method </i></p>
+  <p align="center"><i>Flowchart for ByteGrotto's code cave creation method</i></p>
 </p>
 
 ## Setup
