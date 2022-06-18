@@ -74,3 +74,7 @@ Below is a gif showing that the modified sample still is able to be executed and
 MalConv Class/Model were taken from the repo - [Malware Evasion Competition](https://github.com/endgameinc/malware_evasion_competition)
 </br>
 MalConv White Paper - [Malware Detection by Eating a Whole EXE](https://arxiv.org/pdf/1710.09435.pdf)
+</br>
+Code Cave White Paper - [Optimization of code caves in malware binaries to evade machine learning detectors](https://www.sciencedirect.com/science/article/pii/S0167404822000426)
+</br>
+RootedCon 2020 Code Cave Talk - [Evading Deep Learning Malware Detectors](https://www.youtube.com/watch?v=Qp4hx6HTHrQ)
