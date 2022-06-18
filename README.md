@@ -31,3 +31,23 @@ The ByteGrotto application will take any x32 or .NET PE and and create code cave
   <img width="560" height="450" src="images/flowchart.png">
   <p align="center"><i>Flowchart for ByteGrotto's code cave method </i></p>
 </p>
+
+## Setup
+To evaluate a PE against a model one will need to change the `evaluate` function within the `ByteGrotto` class.  Currently `ByteGrotto` is setup to run against the MalConv model.  
+```python
+    def evaluate(self):
+        malconv = MalConvModel(MALCONV_MODEL_PATH, thresh=0.5)
+        return malconv.predict(self.ba)
+```
+
+Example `main.py`
+```python
+from ByteGrotto import ByteGrotto
+
+def main():
+    bg = ByteGrotto(pe_path=<path to binary to modify>, pe_ouput_name=<output exe name>)
+    bg.generate_adversarial_pe()
+
+if __name__ == '__main__':
+    main()
+```
