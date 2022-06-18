@@ -69,3 +69,7 @@ Below is a gif showing that the modified sample still is able to be executed and
   <img width="760" height="450" src="gifs/GandCrab_SandBox.gif">
   <p align="center"><i>GandCrab w/ code caves running in sandbox</i></p>
 </p>
+
+## Sources
+
+MalConv White Paper - [Malware Detection by Eating a Whole EXE](https://arxiv.org/pdf/1710.09435.pdf)
