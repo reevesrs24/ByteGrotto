@@ -33,6 +33,8 @@ The ByteGrotto application will take any x32 or .NET PE and and create code cave
 </p>
 
 ## Setup
+Python version used `3.6.2`
+
 Install the `requirements.txt` file in a python virtual environment.
 ```bash
 pip install -r requirements.txt
