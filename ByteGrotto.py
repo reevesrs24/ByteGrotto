@@ -13,7 +13,8 @@ from MalConv import MalConv
 
 warnings.filterwarnings("ignore")
 
-
+# The MalConv Model/Class were taken from the repo
+# https://github.com/endgameinc/malware_evasion_competition/blob/master/models.py
 MALCONV_MODEL_PATH = 'models/malconv/malconv.checkpoint'
 NONNEG_MODEL_PATH = 'models/nonneg/nonneg.checkpoint'
 
@@ -96,14 +97,13 @@ class ByteGrotto():
     def generate_adversarial_pe(self):
         epoch = 0
 
-
         self.set_section_data()
         self.set_section_choices()
         score, flagged = self.evaluate()
 
         while flagged:
             epoch += 1
-            
+
             self.add_code_cave()
             score, flagged = self.evaluate()
             self.manage_pe_state(score)

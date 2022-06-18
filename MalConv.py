@@ -2,6 +2,8 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
+# The MalConv Class were taken from the repo
+# https://github.com/endgameinc/malware_evasion_competition/blob/master/models.py
 class MalConv(nn.Module):
     # trained to minimize cross-entropy loss
     # criterion = nn.CrossEntropyLoss()
