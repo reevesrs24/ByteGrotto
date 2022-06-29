@@ -73,7 +73,7 @@ Below is a gif showing that the modified sample still is able to be executed and
 </p>
 
 ## References
-MalConv Class/Model were taken from the repo - [Malware Evasion Competition](https://github.com/endgameinc/malware_evasion_competition)
+Ember, MalConv and Nonneg Malconv Classes and Model's were taken from the repo - [Malware Evasion Competition](https://github.com/endgameinc/malware_evasion_competition)
 </br>
 MalConv White Paper - [Malware Detection by Eating a Whole EXE](https://arxiv.org/pdf/1710.09435.pdf)
 </br>
